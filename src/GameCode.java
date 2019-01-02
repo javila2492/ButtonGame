@@ -18,11 +18,11 @@ public class GameCode extends Application
         Label label = new Label("Clicked " + a + " times");
         Button button = new Button("Click Me!");
 
-        button.setOnAction(function -> {labelChange(label, a);});
+        button.setOnAction(value -> a++, value -> label.setText("Clicked " + a + " times"));
 
-        button.setMaxSize(100, 200);
+        button.setMaxSize(100, 100);
         HBox hbox = new HBox(button, label);
-        Scene scene = new Scene(hbox, 400, 100);
+        Scene scene = new Scene(hbox, 200, 150);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
