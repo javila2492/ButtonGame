@@ -6,7 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import static java.lang.System.nanoTime;
 
 public class GameCode extends Application
 {

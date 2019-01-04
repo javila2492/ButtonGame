@@ -4,16 +4,16 @@ import java.io.IOException;
 
 public class BackEnd
 {
-    public void readScores(String name) throws IOException
+    public void readScores() throws IOException
     {
         String scoreList = "";
         int places = 1;
-        BufferedReader in = new BufferedReader(new FileReader(name));
+        BufferedReader in = new BufferedReader(new FileReader("scores.txt"));
 
         String line;
-        while((line = in.readLine()) != null)
+        while((in.readLine()) != null)
         {
-            scoreList += places + ": " +
+            scoreList += places + ": " + in.readLine();
         }
         in.close();
     }
