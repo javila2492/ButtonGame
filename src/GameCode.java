@@ -1,94 +1,70 @@
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 
 public class GameCode extends Application
 {
-    public int a = 0;
+    private boolean game = true;
+    @FXML
+    private Label label;
 
     @FXML
-    public static Label scores;
-    public Label label;
-    public Button button;
-    public HBox box;
+    private Button button1;
+    private int score;
 
-    public boolean on = true;
-    long timer;
-    boolean loss = false;
-    boolean over = false;
+    @FXML
+    private Label scoreList;
+
+    private String[] textArr = {"GO GO GO!", "Faster now!", "Speed up!", "Hurry!", "Keep clicking!", "Yeah!"};
+    private String[] colorArr = {"blue", "green", "pink", "red", "purple", "white", "orange"};
 
     @Override
-    public void start(Stage primaryStage)
+    public void start(Stage primaryStage) throws Exception
     {
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("ui.fxml"));
+        root.setStyle("-fx-background-color: black");
         primaryStage.setTitle("Button Clicker");
-        Label label = new Label("Score: " + a);
-
-        Button button  = new Button("Click Me!");
-        button.setOnAction(value ->
-        {
-            if(loss)
-            {
-                a--;
-                label.setText("Score: " + a);
-            }
-            if(on)
-            {
-                a++;
-                label.setText("Score: " + a);
-            }
-        });
-
-        button.setMaxSize(150, 120);
-        box = new HBox(button, label);
-        Scene scene = new Scene(box, 400, 150);
-        primaryStage.setScene(new Scene(root, scene, 300, 150));
-
-        timer = System.nanoTime() + 1000000000L;
-        new AnimationTimer() {
-            public void handle(long now)
-            {
-                if(over)
-                    return;
-                if (now > timer)
-                {
-                    timer = now + 1000000000L;
-                    on = !on;
-                }
-                if (!on)
-                {
-                    button.setText("Don't Click");
-                    loss = true;
-                }
-                else
-                {
-                    button.setText("Click Me!");
-                    loss = false;
-                }
-                label.setText("Score:" + Integer.toString(a));
-            }}.start();
-
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10000), actionEvent -> end()));
-        timeline.play();
+        primaryStage.setScene(new Scene(root, 300, 300));
         primaryStage.show();
     }
 
-    public void end()
+    public void click()
     {
-        button.setText("Game Over!");
-        over = true;
-        button.setStyle("-fx-background-color: white; -fx-font-family: cursive; -fx-font-weight: bold;");
+        if(!game)
+            return;
+        button1.setText(textArr[(int)(Math.random() * textArr.length)]);
+        button1.setStyle("-fx-background-color:" + colorArr[(int)(Math.random() * colorArr.length)] + "; -fx-font-family: cursive;");
+        score++;
+        label.setText("Score: " + score);
+        label.setStyle("-fx-background-color: white");
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10000), ae -> endGame()));
+        timeline.play();
+    }
+
+    public void endGame()
+    {
+        String a = "Previous Scores: ";
+        button1.setText("Game over!");
+        button1.setStyle("-fx-background-color: white; -fx-font-family: cursive; -fx-font-weight: bold;");
+        BackEnd.updateScore(score);
+        for(int i = 0; i < BackEnd.readScore().size() - 1; i++)
+        {
+            a += BackEnd.readScore().get(i) + ", ";
+        }
+        scoreList.setText(a);
+        scoreList.setStyle("-fx-background-color: white");
+        game = false;
     }
 
     public static void main(String[] args)

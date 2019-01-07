@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,10 +11,9 @@ public class BackEnd
 {
     public static ArrayList<String> readScore()
     {
-        Path path = Paths.get("score.csv");
+        Path path = Paths.get("src/scores.txt");
         ArrayList<String> scores = new ArrayList<>();
-        try (BufferedReader br = Files.newBufferedReader(path,
-                StandardCharsets.US_ASCII))
+        try (BufferedReader br = Files.newBufferedReader(path))
         {
             String line = br.readLine();
             while (line != null)
@@ -35,14 +33,14 @@ public class BackEnd
     public static void updateScore(int points)
     {
         ArrayList<String> scores = readScore();
-        for(int i = 0; i<scores.size();  i++)
+        for(int i = 0; i < scores.size();  i++)
         {
             if(points > Integer.parseInt(scores.get(i)))
             {
                 try
                 {
-                    scores.add(i,""+points);
-                    BufferedWriter out = new BufferedWriter(new FileWriter("src/sample/score.txt", false));
+                    scores.add(i,"" + points);
+                    BufferedWriter out = new BufferedWriter(new FileWriter("src/scores.txt", false));
                     for(int j = 0;j < scores.size() - 1; j++)
                     {
                         out.write(scores.get(j) + "\n");
