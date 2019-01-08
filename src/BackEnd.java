@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,32 +24,19 @@ public class BackEnd
             ioe.printStackTrace();
         }
 
-
         return scores;
     }
     public static void updateScore(int points)
     {
-        ArrayList<String> scores = readScore();
-        for(int i = 0; i < scores.size();  i++)
+        try(FileWriter fw = new FileWriter("scores.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
         {
-            if(points > Integer.parseInt(scores.get(i)))
-            {
-                try
-                {
-                    scores.add(i,"" + points);
-                    BufferedWriter out = new BufferedWriter(new FileWriter("src/scores.txt", false));
-                    for(int j = 0;j < scores.size() - 1; j++)
-                    {
-                        out.write(scores.get(j) + "\n");
-                    }
-                    out.close();
-                }
-                catch (IOException e)
-                {
-                    System.out.println("exception occurred" + e);
-                }
-                break;
-            }
+            out.println(points);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
 }

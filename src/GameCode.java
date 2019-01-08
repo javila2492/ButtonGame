@@ -58,7 +58,7 @@ public class GameCode extends Application
         button1.setText("Game over!");
         button1.setStyle("-fx-background-color: white; -fx-font-family: cursive; -fx-font-weight: bold;");
         BackEnd.updateScore(score);
-        for(int i = 0; i < BackEnd.readScore().size() - 1; i++)
+        for(int i = 0; i < BackEnd.readScore().size(); i++)
         {
             a += BackEnd.readScore().get(i) + ", ";
         }
